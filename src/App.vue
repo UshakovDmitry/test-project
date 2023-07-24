@@ -8,10 +8,13 @@
 
 <style>
 /* Глобальные стили и стили по умолчанию */
+html,
 body {
+  min-height: 100vh;
   margin: 0;
-  font-family: Arial, sans-serif;
-  background-color: #080710;
-
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  background-color: rgb(56, 51, 89);
 }
 </style>

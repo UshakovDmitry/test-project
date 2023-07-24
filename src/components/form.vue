@@ -1,45 +1,40 @@
 <!-- eslint-disable vue/multi-word-component-names -->
+<!-- eslint-disable vue/no-mutating-props -->
 <template>
-  <section class="register">
-    <div class="background">
-      <div class="shape"></div>
-      <div class="shape"></div>
-    </div>
+  <form @submit.prevent="register">
+    <h3>Регистриция</h3>
+    <label for="username">E-mail</label>
+    <input
+      type="text"
+      id="username"
+      placeholder="Email"
+      v-model="props.email"
+    />
 
-    <form>
-      <h3>Регистриция</h3>
-      <label for="username">E-mail</label>
-      <input type="text" id="username" placeholder="Email" />
+    <label for="password">Пароль</label>
+    <input
+      type="password"
+      id="password"
+      v-model="props.password"
+      placeholder="Password"
+    />
 
-      <label for="password">Пароль</label>
-      <input type="password" id="password" placeholder="Password" />
-      <button>Зарегистрироваться</button>
-    </form>
-  </section>
+    <button @click="viewModel.handleRegister()">Зарегистрироваться</button>
+    <p>{{ props.errorMessages }}</p>
+  </form>
+  
 </template>
 
 <script setup>
-// import { ref } from "vue";
-
-// const email = ref("");
-// const password = ref("");
-
-// const register = () => {
-//   // Здесь код для регистрации
-//   console.log(email.value, password.value);
-// };
+import { defineProps } from "vue";
+const props = defineProps({
+  email: String,
+  password: String,
+  errorMessages: String,
+});
 </script>
 
 <style scoped>
-
-.register {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: calc(100vh - 140px); /* Учитываем высоту header и footer */
-}
-
 .background {
   position: absolute;
   width: 430px;
@@ -59,7 +54,7 @@
 
 .shape:first-child {
   background-color: rgba(14, 151, 237, 0.13);
-  box-shadow: 0 20px 40px  rgba(14, 151, 237, 0.13);
+  box-shadow: 0 20px 40px rgba(14, 151, 237, 0.13);
   top: -130px;
   right: -130px;
 }

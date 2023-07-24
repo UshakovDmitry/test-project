@@ -1,60 +1,80 @@
 import { createRouter, createWebHistory } from "vue-router";
-
+import { LocalStorageProvider } from "@/provider/LocalStorage.provider";
 
 import NotFound from "../views/NotFound.vue";
 import Layout from "../layouts/default.vue";
-import Login from "../views/Login.vue";
-import Register from "../views/Register.vue";
-import MainPage from "../views/MainPage.vue";
-import About from "../views/About.vue";
-// import TutorialZHS from "../views/TutorialZHS.vue";
+import Login from "../views/login/view.vue";
+import Register from "../views/register/view.vue";
+import MainPage from "../views/main-page/view.vue";
+import WelcomPage from "../views/WelcomePage.vue";
 
 const routes = [
   {
-    path: '/',
+    path: "/",
     component: Layout,
     children: [
       {
-        path: '/',
-        name: 'main-page',
-        redirect: '/main-page'
+        path: "/",
+        redirect: "/welcome-page",
       },
       {
-        path: 'log-in',
-        name: 'log-in',
-        component: Login
+        path: "/log-in",
+        name: "log-in",
+        component: Login,
       },
       {
-        path: 'register',
-        name: 'register',
-        component: Register
+        path: "/register",
+        name: "register",
+        component: Register,
       },
       {
-        path: 'main-page',
-        name: 'main-page',
-        component: MainPage
+        path: "/welcome-page",
+        name: "welcome-page",
+        component: WelcomPage,
       },
-      // {
-      //   path: 'tutorial-zhs',
-      //   component: TutorialZHS
-      // },
       {
-        path: 'about',
-        name: 'about',
-        component: About
+        path: "/main-page",
+        name: "main-page",
+        component: MainPage,
+        meta: {
+          requiresAuth: true,
+        },
+      },
+      {
+        path: "/tutorial-page",
+        name: "tutorial-page",
+        // component: MainPage,
+        meta: {
+          requiresAuth: true,
+        },
       },
     ],
   },
   {
-    path: '/:pathMatch(.*)*',
-    name: 'NotFound',
-    component: NotFound
+    path: "/:pathMatch(.*)*",
+    name: "NotFound",
+    component: NotFound,
   },
 ];
 
 const router = createRouter({
   history: createWebHistory(),
   routes,
+});
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some((record) => record.meta.requiresAuth)) {
+    if (!LocalStorageProvider.getValue("token")) {
+      next({
+        path: "/log-in",
+        query: { redirect: to.fullPath },
+      });
+    } else {
+      next();
+    }
+  } else {
+    next();
+  }
 });
 
 export default router;
