@@ -1,12 +1,13 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <section class="main">
-    <h1 class="main__title">Добро пожаловать на мой сайт</h1>
+    <h1 class="main__title">Тестовое наставника kids web</h1>
     <div class="main__container">
       <div class="main__images">
         <figure class="main__image-container">
           <img
             class="main__image main__image--new"
-            src="../assets/images/new-img.jpg"
+            src="../../assets/images/new-img.jpg"
             alt="Мое текущее фото"
           />
           <figcaption class="main__caption">Мое текущее фото</figcaption>
@@ -14,7 +15,7 @@
         <figure class="main__image-container">
           <img
             class="main__image main__image--old"
-            src="../assets/images/old-img.jpeg"
+            src="../../assets/images/old-img.jpeg"
             alt="Мое школьное фото"
           />
           <figcaption class="main__caption">Мое школьное фото</figcaption>
@@ -22,19 +23,30 @@
       </div>
       <div class="main__description">
         <h2 class="main__description-title">
-          Привет! Меня зовут Дмитрий, и я <span class="highlight">обожаю веб-разработку</span>.
+          Привет! Меня зовут Дмитрий, и я
+          <span class="highlight">обожаю WEB-разработку</span>.
         </h2>
         <p class="main__description-text">
-          Мне всегда <span class="highlight">нравился дизайн</span>, именно поэтому я решил заняться <span class="highlight">frontend</span>. 
+          Мне всегда <span class="highlight">нравился дизайн</span>, именно
+          поэтому я решил заняться
+          <span class="highlight">Front-end разработкой</span>.
         </p>
         <p class="main__description-text">
-          Я начинал с <span class="highlight">фриланса</span>, что дало мне возможность попробовать себя в разных проектах и получить кучу опыта. Помогал разрабатывать сайты для друзей, и это только усилило мою любовь к программированию.
+          Я начинал с <span class="highlight">фриланса</span>, что дало мне
+          возможность попробовать себя в разных проектах и получить кучу опыта.
+          Помогал разрабатывать сайты для друзей, и это только усилило мою
+          любовь к программированию.
         </p>
         <p class="main__description-text">
-          Мне нравится создавать что-то новое, решать сложные задачи и видеть результаты своей работы. Я всегда в курсе последних <span class="highlight">новинок в мире веб-разработки</span>. Это делает мою работу интересной и помогает мне развиваться. 
+          Мне нравится создавать что-то новое, решать сложные задачи и видеть
+          результаты своей работы. Я всегда в курсе последних
+          <span class="highlight">новинок в мире веб-разработки</span>. Это
+          делает мою работу интересной и помогает мне развиваться.
         </p>
         <p class="main__description-text">
-          В общем, мой путь в программировании это мой выбор и моя страсть. Если тебе нужен разработчик, который любит свою работу, буду рад помочь. Давай создавать что-то крутое вместе!
+          В общем, мой путь в программировании это мой выбор и моя страсть. Я
+          счастлив, что могу заниматься любимым делом и уверен, что могу быть
+          полезен в вашей команде.
         </p>
       </div>
     </div>
@@ -42,24 +54,21 @@
 </template>
 
 <style scoped>
-
 .main {
-  width: 100%;
-  min-height: calc(100vh - 100px);  /* Assuming the height of header and footer combined is 100px */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-  /* padding: 50px 20px;  50px top and bottom padding to clear the header and footer“ */
-  background-color: #1a1a2e;
+  /* padding: 50px 20px;  50px  */
+  /* background-color: #1a1a2e; */
   color: white;
 }
 
 .main__title {
   font-size: 30px;
   margin-bottom: 20px;
-  text-transform: uppercase;
+  font-weight: bold;
 }
 
 .main__container {
@@ -73,7 +82,8 @@
 .main__images {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
+  gap: 100px;
   margin-right: 50px;
 }
 
@@ -97,7 +107,7 @@
 
 .main__caption {
   margin-top: 10px;
-  font-size: 20px;
+  font-size: 24px;
   text-align: center;
 }
 
@@ -108,13 +118,13 @@
 }
 
 .main__description-title {
-  font-size: 24px;
+  font-size: 26px;
   font-weight: bold;
   margin-bottom: 20px;
 }
 
 .main__description-text {
-  font-size: 18px;
+  font-size: 22px;
   margin-bottom: 20px;
   line-height: 1.6;
 }

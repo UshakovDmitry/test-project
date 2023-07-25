@@ -1,7 +1,24 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <section class="about">
-    <h1 class="about__title">Приватная страница, доступная после авторизации</h1>
+    <div class="about__repos">
+      <div class="about__repos-item">
+        <a
+          href="https://github.com/UshakovDmitry/test-project"
+          target="_blank"
+          class="about__repos-link"
+          >Frontend Repository</a
+        >
+      </div>
+      <div class="about__repos-item">
+        <a
+          href="https://github.com/UshakovDmitry/test-project-backend"
+          target="_blank"
+          class="about__repos-link"
+          >Backend Repository</a
+        >
+      </div>
+    </div>
 
     <iframe
       width="560"
@@ -12,15 +29,22 @@
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
       allowfullscreen
     ></iframe>
-    {{ model.feedbackMessage  }}
- <FeedbackForm :feedbackMessage="model.feedbackMessage"
- @sendFeedback="viewModel.sendFeedback" />
+
+    <FeedbackForm
+      :feedbackMessage="model.feedbackMessage"
+      @sendFeedback="viewModel.sendFeedback($event)"
+    />
+    <ModalComponent
+      :show="model.isShow"
+      :message="model.modalMessage"
+      :errorMessages="''"
+    />
   </section>
 </template>
 
 <script setup>
-import FeedbackForm from '@/components/FeedbackForm.vue';
-
+import FeedbackForm from "@/components/FeedbackForm.vue";
+import ModalComponent from "@/components/modal.vue";
 import MainPageModel from "./model.js";
 import MainPageViewModel from "./viewModel.js";
 import { ref } from "vue";
@@ -39,29 +63,36 @@ const viewModel = ref(new MainPageViewModel(model.value));
 }
 
 .about__title {
-  font-size: 2.5em;
+  font-size: 40px;
   color: #f8f5f5;
-  margin-bottom: 1em;
+  margin-bottom: 20px;
 }
 
-.about__description {
-  font-size: 1.2em;
-  color: #666;
-  margin-bottom: 2em;
+.about__repos {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 20px;
 }
 
-.about__image {
-  width: 80%;
-  max-width: 600px;
+.about__repos-item {
+  font-size: 19px;
 }
-/* ... предыдущие стили ... */
 
-/* ... предыдущие стили ... */
+.about__repos-link {
+  color: #f8f5f5;
+  font-size: 22px;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
 
-/* Стили для формы обратной связи */
+.about__repos-link:hover {
+  color: #a5a3a3;
+}
+
 .feedback-form {
   max-width: 400px;
-  margin: 50px auto; /* Располагаем форму ниже по странице */
+  margin: 50px auto;
   background-color: rgba(255, 255, 255, 0.13);
   border-radius: 10px;
   border: 2px solid rgba(255, 255, 255, 0.1);
@@ -123,6 +154,4 @@ const viewModel = ref(new MainPageViewModel(model.value));
   border-radius: 5px;
   cursor: pointer;
 }
-
-/* ... остальные стили ... */
 </style>

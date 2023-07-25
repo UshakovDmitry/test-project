@@ -1,7 +1,12 @@
-/* eslint-disable no-unused-vars */
 export default class MainPageModel {
   feedbackMessage;
-  constructor(config) {
+  statusMessage;
+  isShow;
+  modalMessage;
+  constructor() {
     this.feedbackMessage = "";
+    this.statusMessage = "";
+    this.modalMessage = "";
+    this.isShow = false;
   }
 }

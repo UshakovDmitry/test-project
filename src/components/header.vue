@@ -2,46 +2,76 @@
 <template>
   <header class="header">
     <div class="header__container">
-      <router-link to="/welcome-page" class="header__title">logo</router-link>
-      <nav v-if="!isAuthenticated">
-        <router-link to="/log-in" class="header__btn">Login</router-link>
-        <router-link to="/register" class="header__btn">Register</router-link>
-      </nav>
-      <nav v-else>
-        <router-link to="/welcome-page" class="header__btn" @click="logout">Logout</router-link>
-      </nav>
+        <router-link to="/welcome-page" class="header__title">App</router-link>
+    
+        <router-link
+          :to="
+            isAuthenticated && currentPath === '/welcome-page'
+              ? '/main-page'
+              : '/welcome-page'
+          "
+          class="header__btn"
+          v-if="isAuthenticated"
+        >
+          {{
+            isAuthenticated && currentPath === "/welcome-page"
+              ? "Private Page"
+              : "Public Page"
+          }}
+        </router-link>
+
+      <div class="header__auth-buttons">
+        <nav v-if="!isAuthenticated">
+          <router-link to="/log-in" class="header__btn">Login</router-link>
+          <router-link to="/register" class="header__btn">Register</router-link>
+        </nav>
+        <nav v-else>
+          <router-link to="/welcome-page" class="header__btn" @click="logout"
+            >Logout</router-link
+          >
+        </nav>
+      </div>
     </div>
   </header>
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue';
-// import { useRouter } from 'vue-router';
+import { ref, onBeforeUnmount } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import { LocalStorageProvider } from '@/provider/LocalStorage.provider';
 
-let isAuthenticated = ref(false);
+let isAuthenticated = ref(!!LocalStorageProvider.getValue('token'));
+let currentPath = ref('');
+const route = useRoute();
+const router = useRouter();
 
 const checkAuth = () => {
-  isAuthenticated.value = LocalStorageProvider.getValue('token');
+  isAuthenticated.value = !!LocalStorageProvider.getValue('token');
 };
 
-onMounted(checkAuth);
+const updateCurrentPath = () => {
+  currentPath.value = route.path;
+};
 
-// Обновляем статус при изменении локального хранилища
-window.addEventListener('storage', checkAuth);
+router.afterEach(() => {
+  checkAuth();
+  updateCurrentPath();
+});
 
 onBeforeUnmount(() => {
   window.removeEventListener('storage', checkAuth);
 });
 
-// const router = useRouter();
+window.addEventListener('storage', checkAuth);
 
 const logout = () => {
-  localStorage.removeItem('token');
+  LocalStorageProvider.removeValue('token');
   isAuthenticated.value = false;
-  // router.push('/welcome-page');
 };
+
 </script>
+
+
 
 <style scoped>
 .header {
@@ -61,6 +91,13 @@ const logout = () => {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.header__auth-buttons {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: auto;
 }
 
 .header__title {

@@ -9,7 +9,7 @@
       <h3>Авторизация</h3>
       <label for="username"></label>
       <input
-        type="text"
+        type="email"
         id="username"
         v-model="model.email"
         placeholder="Email"
@@ -23,15 +23,7 @@
         placeholder="Password"
       />
       <button @click="viewModel.handleLogin">Войти</button>
-      <p>{{ model.errorMessages }}</p>
-      {{ model.isShow  }}
-
-      <!-- <div class="group">
-        <input type="text" class="input" required />
-        <span class="highlight"></span>
-        <span class="bar"></span>
-        <label>Username</label>
-      </div> -->
+      <p class="error">{{ model.errorMessages }}</p>
     </form>
     <!-- Модальное окно успешной авторизации -->
     <ModalComponent :show="model.isShow" :message="model.modalMessage" />
@@ -142,7 +134,6 @@ label {
     background: transparent;
   }
 }
-/* ////////////////////////////////////////////// */
 .login {
   background-color: #080710;
 }
@@ -225,6 +216,10 @@ input {
   color: #e5e5e5;
 }
 
+input:focus {
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+}
+
 button {
   margin-top: 50px;
   width: 100%;
@@ -235,5 +230,15 @@ button {
   font-weight: 600;
   border-radius: 5px;
   cursor: pointer;
+}
+.error {
+  color: rgb(238, 246, 6);
+  text-align: center;
+  margin-top: 10px;
+  transition: all 0.5s ease-in-out;
+  font-size: 22px;
+  border-radius: 16px;
+  padding: 10px;
+
 }
 </style>

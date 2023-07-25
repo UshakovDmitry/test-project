@@ -1,12 +1,12 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { LocalStorageProvider } from "@/provider/LocalStorage.provider";
 
-import NotFound from "../views/NotFound.vue";
+import NotFound from "../views/not-found-page/view.vue";
 import Layout from "../layouts/default.vue";
 import Login from "../views/login/view.vue";
 import Register from "../views/register/view.vue";
 import MainPage from "../views/main-page/view.vue";
-import WelcomPage from "../views/WelcomePage.vue";
+import WelcomPage from "../views/welcome-page/view.vue";
 
 const routes = [
   {
@@ -43,9 +43,9 @@ const routes = [
       {
         path: "/tutorial-page",
         name: "tutorial-page",
-        // component: MainPage,
+        // component: TutorialPage,
         meta: {
-          requiresAuth: true,
+          requiresAuth: true, 
         },
       },
     ],

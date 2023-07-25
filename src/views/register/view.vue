@@ -6,9 +6,8 @@
       <div class="shape"></div>
     </div>
 
-    <form  @submit.prevent="register">
-      <h3>Регистриция</h3>
-      <label for="username">E-mail</label>
+    <form @submit.prevent="register">
+      <h3>Регистрация</h3>
       <input
         type="text"
         id="username"
@@ -16,28 +15,28 @@
         v-model="model.email"
       />
 
-      <label for="password">Пароль</label>
       <input
         type="password"
         id="password"
         v-model="model.password"
         placeholder="Password"
       />
-      
-      <button @click="viewModel.handleRegister()">Зарегистрироваться</button>
-      <p>{{ model.errorMessages }}</p>
-    </form>
-<!-- <FeedbackForm></FeedbackForm> -->
 
-        <!-- Модальное окно успешной регистрации -->
-        <ModalComponent :show="model.isShow" :message="model.modalMessage" :errorMessages="model.errorMessages"/>
+      <button @click="viewModel.handleRegister()">Зарегистрироваться</button>
+      <p class="error">{{ model.errorMessages }}</p>
+    </form>
+    <!-- Модальное окно успешной регистрации -->
+    <ModalComponent
+      :show="model.isShow"
+      :message="model.modalMessage"
+      :errorMessages="model.errorMessages"
+    />
   </section>
 </template>
 
 <script setup>
 import { ref } from "vue";
 import ModalComponent from "@/components/modal.vue";
-// import FeedbackForm from "@/components/FeedbackForm.vue";
 import RegisterModel from "./model.js";
 import RegisterViewodel from "./viewModel.js";
 
@@ -132,6 +131,9 @@ input {
 ::placeholder {
   color: #e5e5e5;
 }
+input:focus {
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+}
 
 button {
   margin-top: 50px;
@@ -143,5 +145,14 @@ button {
   font-weight: 600;
   border-radius: 5px;
   cursor: pointer;
+}
+.error {
+  color: rgb(238, 246, 6);
+  text-align: center;
+  margin-top: 10px;
+  transition: all 0.5s ease-in-out;
+  font-size: 22px;
+  border-radius: 16px;
+  padding: 10px;
 }
 </style>

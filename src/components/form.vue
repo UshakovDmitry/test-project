@@ -1,72 +1,49 @@
 <!-- eslint-disable vue/multi-word-component-names -->
-<!-- eslint-disable vue/no-mutating-props -->
 <template>
-  <form @submit.prevent="register">
-    <h3>Регистриция</h3>
-    <label for="username">E-mail</label>
+  <form class="register-form" @submit.prevent="handleSubmit">
+    <h3 class="register-form__title">Регистрация</h3>
+    <label class="register-form__label" for="username">E-mail</label>
     <input
       type="text"
       id="username"
-      placeholder="Email"
-      v-model="props.email"
+      class="register-form__input"
+      placeholder=""
+      v-model="email"
     />
 
-    <label for="password">Пароль</label>
+    <label class="register-form__label" for="password">Пароль</label>
     <input
       type="password"
       id="password"
-      v-model="props.password"
-      placeholder="Password"
+      class="register-form__input"
+      v-model="password"
+      placeholder=""
     />
 
-    <button @click="viewModel.handleRegister()">Зарегистрироваться</button>
-    <p>{{ props.errorMessages }}</p>
+    <button type="submit" class="register-form__button">Зарегистрироваться</button>
+    <p class="register-form__error">{{ errorMessage }}</p>
   </form>
-  
 </template>
 
 <script setup>
-import { defineProps } from "vue";
-const props = defineProps({
-  email: String,
-  password: String,
-  errorMessages: String,
+import { ref, defineProps, defineEmits } from "vue";
+
+defineProps({
+  errorMessage: String,
 });
+
+const emits = defineEmits(['register']);
+
+let email = ref("");
+let password = ref("");
+
+const handleSubmit = () => {
+  emits.register({ email: email.value, password: password.value });
+};
 </script>
 
 <style scoped>
-.background {
-  position: absolute;
-  width: 430px;
-  height: 480px;
-  transform: translate(-50%, -50%);
-  left: 50%;
-  top: 50%;
-}
-
-.background .shape {
-  position: absolute;
-  width: 300px;
-  height: 300px;
-  border-radius: 50%;
-  transition: all 0.5s ease;
-}
-
-.shape:first-child {
-  background-color: rgba(14, 151, 237, 0.13);
-  box-shadow: 0 20px 40px rgba(14, 151, 237, 0.13);
-  top: -130px;
-  right: -130px;
-}
-
-.shape:last-child {
-  background-color: rgba(234, 135, 13, 0.13);
-  box-shadow: 0 20px 40px rgba(234, 135, 13, 0.13);
-  bottom: -120px;
-  left: -100px;
-}
-
-form {
+.register-form {
   height: 420px;
   width: 400px;
   background-color: rgba(255, 255, 255, 0.13);
@@ -80,41 +57,39 @@ form {
   padding: 50px 35px;
 }
 
-form * {
-  color: #fff;
-  outline: none;
-  border: none;
-  letter-spacing: 0.5px;
-}
-
-form h3 {
+.register-form__title {
   text-align: center;
   font-size: 32px;
   line-height: 42px;
   font-weight: 500;
+  color: #fff;
 }
-label {
+
+.register-form__label {
   display: block;
   margin-top: 30px;
   font-size: 16px;
   font-weight: 500;
 }
-input {
+
+.register-form__input {
   display: block;
   width: 100%;
   height: 50px;
   border-radius: 3px;
-  background-color: rgba(255, 255, 255, 0.07);
+  background-color: rgba(97, 93, 93, 0.07);
   padding: 0 10px;
-  font-size: 14px;
+  font-size: 18px;
   font-weight: 300;
   margin-top: 8px;
-}
-::placeholder {
-  color: #e5e5e5;
+  color: #fff;
 }
 
-button {
+.register-form__input:focus {
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+}
+
+.register-form__button {
   margin-top: 50px;
   width: 100%;
   background-color: #fff;
@@ -124,5 +99,15 @@ button {
   font-weight: 600;
   border-radius: 5px;
   cursor: pointer;
+}
+
+.register-form__error {
+  color: rgb(238, 246, 6);
+  text-align: center;
+  margin-top: 10px;
+  transition: all 0.5s ease-in-out;
+  font-size: 22px;
+  border-radius: 16px;
+  padding: 10px;
 }
 </style>

@@ -19,18 +19,16 @@ import Footer from "@/components/footer.vue";
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  justify-content: flex-start; /* Равномерное распределение между хедером, контентом и футером */
-  align-items: center; /* Выравнивание по центру по горизонтали */
+  justify-content: flex-start;
+  align-items: center;
 }
 
 .layout__content {
-  max-width: 1100px; /* Максимальная ширина контентной части */
+  max-width: 1100px;
   width: 100%;
   flex: 1;
   overflow: auto;
   padding-top: 70px;
   padding-bottom: 70px;
-
 }
-
 </style>

@@ -4,60 +4,37 @@
   <form class="feedback-form" @submit.prevent="submitForm">
     <h2 class="feedback-form__title">Обратная связь</h2>
 
-    <label class="feedback-form__label" for="message">Ваше сообщение</label>
     <textarea
       class="feedback-form__textarea"
       id="message"
       v-model="localFeedbackMessage"
-      placeholder="Ваше сообщение..."
+      placeholder="Напишите все что вы думаете..."
     ></textarea>
 
-    <button
-      class="feedback-form__submit-button"
-      type="submit"
-      @click="sendFeedback"
-    >
+    <button class="feedback-form__submit-button" type="submit">
       Отправить
     </button>
-
   </form>
 </template>
 
 <script setup>
-import { ref, watchEffect,defineProps,defineEmits } from 'vue';
+import { ref, defineProps, defineEmits } from "@vue/runtime-core";
 
-const props = defineProps({
+defineProps({
   feedbackMessage: {
     type: String,
-    default: ''
-  }
+    required: true,
+  },
 });
+const emit = defineEmits(["sendFeedback"]);
 
-let localFeedbackMessage = ref(props.feedbackMessage);
-
-watchEffect(() => {
-  localFeedbackMessage.value = props.feedbackMessage;
-});
-
-const emit = defineEmits(['sendFeedback', 'update:feedbackMessage']);
-
-const sendFeedback = () => {
-  emit('sendFeedback');
-  emit('update:feedbackMessage', localFeedbackMessage.value);
-};
+const localFeedbackMessage = ref(""); 
 
 const submitForm = () => {
-  sendFeedback();
+  emit("sendFeedback", localFeedbackMessage.value); 
+  localFeedbackMessage.value = ""; 
 };
 </script>
-
-<!-- Ваш стиль... -->
-
-
-<!-- Ваш стиль... -->
-
-
-
 
 <style scoped>
 .feedback-form {
@@ -85,12 +62,6 @@ const submitForm = () => {
   font-weight: 500;
 }
 
-.feedback-form__label {
-  display: block;
-  margin-top: 30px;
-  font-size: 16px;
-  font-weight: 500;
-}
 
 .feedback-form__textarea {
   display: block;
@@ -98,7 +69,7 @@ const submitForm = () => {
   height: 100px;
   border-radius: 3px;
   background-color: rgba(255, 255, 255, 0.07);
-  padding: 0 10px;
+  padding: 10px;
   font-size: 14px;
   font-weight: 300;
   margin-top: 8px;

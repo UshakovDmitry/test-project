@@ -32,7 +32,6 @@ export default class RegisterViewModel {
       }
       // открываем модальное окно с сообщением об успешной регистрации
       this.model.isShow = true;
-
       this.model.modalMessage = "Вы успешно зарегистрировались!";
       // Сохраняем JWT токен в локальное хранилище и переходим на страницу авторизации через 2 секунды
       setTimeout(() => {

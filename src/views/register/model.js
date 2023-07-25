@@ -7,9 +7,9 @@ export default class RegisterModel {
   modalMessage;
   isShow;
   constructor(config) {
-    this.email =  "";
-    this.password =  "";
-    this.errorMessages =  "";
+    this.email = "";
+    this.password = "";
+    this.errorMessages = "";
     this.isShow = false;
     this.modalMessage = "";
   }
