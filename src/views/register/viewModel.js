@@ -12,6 +12,7 @@ export default class RegisterViewModel {
   // Функция для регистрации
   async register() {
     try {
+      console.log(BASE_URL);
       const response = await fetch(`${BASE_URL}/auth/register`, {
         method: "POST",
         headers: {

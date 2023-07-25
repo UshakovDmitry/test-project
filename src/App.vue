@@ -7,6 +7,10 @@
 </script>
 
 <style>
+@font-face {
+  font-family: 'Fredoka One';
+  src: url('./assets/fonts/Cera-Pro-Regular-Italic.ttf');
+}
 /* Глобальные стили и стили по умолчанию */
 html,
 body {
@@ -16,5 +20,8 @@ body {
   display: flex;
   flex-direction: column;
   background-color: rgb(56, 51, 89);
+}
+h1,h2,p,span,div,button,figcaption {
+  font-family: 'Fredoka One', cursive;
 }
 </style>

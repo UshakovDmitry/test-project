@@ -1,74 +1,34 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <section class="about">
-    <h1 class="about__title">О нас</h1>
-    <p class="about__description">
-      Lorem ipsum, dolor sit amet consectetur adipisicing elit. Libero unde
-      soluta, nulla eos hic incidunt sequi in illo facilis delectus, rem vel ad
-      pariatur ipsam reprehenderit velit mollitia neque architecto.
-    </p>
+    <h1 class="about__title">Приватная страница, доступная после авторизации</h1>
+
     <iframe
       width="560"
       height="315"
-      src="https://www.youtube.com/embed/bgJPQxWqGZY"
+      src="https://www.youtube.com/embed/8ggis-ppky4"
+      title="YouTube video player"
       frameborder="0"
-      allow="autoplay; encrypted-media"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
       allowfullscreen
     ></iframe>
-    <!-- <div class="feedback-form">
-      <h3 class="feedback-form__title">Форма обратной связи</h3>
-      <form @submit.prevent="submitFeedback" class="feedback-form__form">
-        <label for="name" class="feedback-form__label">Ваше имя:</label>
-        <input
-          type="text"
-          id="name"
-          v-model="name"
-          class="feedback-form__input"
-          placeholder="Введите ваше имя"
-          required
-        />
-
-        <label for="email" class="feedback-form__label">Ваш Email:</label>
-        <input
-          type="email"
-          id="email"
-          v-model="email"
-          class="feedback-form__input"
-          placeholder="Введите ваш Email"
-          required
-        />
-
-        <label for="message" class="feedback-form__label">Сообщение:</label>
-        <textarea
-          id="message"
-          v-model="message"
-          class="feedback-form__textarea"
-          placeholder="Введите ваше сообщение"
-          required
-        ></textarea>
-
-        <button type="submit" class="feedback-form__submit-button">
-          Отправить
-        </button>
-      </form>
-    </div> -->
-    <!-- <FeedbackForm
-    :feedback="model.feedback"
-    @submitFeedback="viewModel.submitFeedback"
-    ></FeedbackForm> -->
+    {{ model.feedbackMessage  }}
+ <FeedbackForm :feedbackMessage="model.feedbackMessage"
+ @sendFeedback="viewModel.sendFeedback" />
   </section>
 </template>
 
 <script setup>
-// import FeedbackForm from "@/components/FeedbackForm.vue";
-// import MainPageModel from "./model.js";
-// import MainPageViewModel from "./viewModel.js";
-// import { ref } from "vue";
-// const model = ref(new MainPageModel());
-// const viewModel = ref(new MainPageViewModel(model.value));
+import FeedbackForm from '@/components/FeedbackForm.vue';
+
+import MainPageModel from "./model.js";
+import MainPageViewModel from "./viewModel.js";
+import { ref } from "vue";
+const model = ref(new MainPageModel());
+const viewModel = ref(new MainPageViewModel(model.value));
 </script>
 
-<style>
+<style scoped>
 .about {
   display: flex;
   flex-direction: column;
@@ -80,7 +40,7 @@
 
 .about__title {
   font-size: 2.5em;
-  color: #333;
+  color: #f8f5f5;
   margin-bottom: 1em;
 }
 

@@ -27,7 +27,7 @@
       <button @click="viewModel.handleRegister()">Зарегистрироваться</button>
       <p>{{ model.errorMessages }}</p>
     </form>
-<FeedbackForm></FeedbackForm>
+<!-- <FeedbackForm></FeedbackForm> -->
 
         <!-- Модальное окно успешной регистрации -->
         <ModalComponent :show="model.isShow" :message="model.modalMessage" :errorMessages="model.errorMessages"/>
@@ -37,7 +37,7 @@
 <script setup>
 import { ref } from "vue";
 import ModalComponent from "@/components/modal.vue";
-import FeedbackForm from "@/components/FeedbackForm.vue";
+// import FeedbackForm from "@/components/FeedbackForm.vue";
 import RegisterModel from "./model.js";
 import RegisterViewodel from "./viewModel.js";
 

@@ -19,7 +19,7 @@ import Footer from "@/components/footer.vue";
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  justify-content: space-between; /* Равномерное распределение между хедером, контентом и футером */
+  justify-content: flex-start; /* Равномерное распределение между хедером, контентом и футером */
   align-items: center; /* Выравнивание по центру по горизонтали */
 }
 

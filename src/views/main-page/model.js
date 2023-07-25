@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 export default class MainPageModel {
-  feedback;
+  feedbackMessage;
   constructor(config) {
-    this.feedback = "";
+    this.feedbackMessage = "";
   }
 }

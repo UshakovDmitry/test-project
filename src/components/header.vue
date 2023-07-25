@@ -8,7 +8,7 @@
         <router-link to="/register" class="header__btn">Register</router-link>
       </nav>
       <nav v-else>
-        <button class="header__btn" @click="logout">Logout</button>
+        <router-link to="/welcome-page" class="header__btn" @click="logout">Logout</router-link>
       </nav>
     </div>
   </header>
@@ -16,12 +16,13 @@
 
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue';
-import { useRouter } from 'vue-router';
+// import { useRouter } from 'vue-router';
+import { LocalStorageProvider } from '@/provider/LocalStorage.provider';
 
 let isAuthenticated = ref(false);
 
 const checkAuth = () => {
-  isAuthenticated.value = !!localStorage.getItem('token');
+  isAuthenticated.value = LocalStorageProvider.getValue('token');
 };
 
 onMounted(checkAuth);
@@ -33,12 +34,12 @@ onBeforeUnmount(() => {
   window.removeEventListener('storage', checkAuth);
 });
 
-const router = useRouter();
+// const router = useRouter();
 
 const logout = () => {
   localStorage.removeItem('token');
   isAuthenticated.value = false;
-  router.push('/welcome-page');
+  // router.push('/welcome-page');
 };
 </script>
 

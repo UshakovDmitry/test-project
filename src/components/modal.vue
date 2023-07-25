@@ -1,57 +1,71 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
-  <div class="modal" v-if="show">
-    <div class="modal__content">
-      <h2 class="modal__title">УСПЕХ</h2>
-      <p class="modal__message">{{message}}</p>
-      <button class="modal__close-button" @click="closeModal">Close</button>
+  <transition name="modal">
+    <div class="modal" v-if="show">
+      <div class="modal__content">
+        <h2 class="modal__title">Успешно!</h2>
+        <p class="modal__message">{{message}}</p>
+      </div>
     </div>
-  </div>
+  </transition>
 </template>
 
 <script setup>
-import { defineProps, } from "vue";
+import { defineProps } from "vue";
  defineProps({
   show: Boolean,
   message: String,
 });
-
 </script>
 
 <style scoped>
 .modal {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   position: fixed;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   z-index: 100;
 }
 
+.modal::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
 .modal__content {
+  position: relative;
   width: 70%;
   max-width: 500px;
-  background-color: #f9e0e3;
+  background-color: #ffffff;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
   text-align: center;
-  animation: appear .5s ease-in-out;
 }
 
-@keyframes appear {
-  from {
-    opacity: 0;
-    transform: translate(-50%, -50%);
-  }
-  to {
-    opacity: 1;
-    transform: translate(0);
-  }
+.modal-enter-active, .modal-leave-active {
+  transition: all 1s; 
 }
 
+.modal-enter, .modal-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+.modal::before {
+  transition: all 1s;
+}
+
+.modal-enter::before, .modal-leave-to::before {
+  opacity: 0;
+}
 </style>
