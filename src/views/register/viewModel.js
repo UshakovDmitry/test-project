@@ -1,6 +1,6 @@
 import { useRouter } from "vue-router";
 import { LocalStorageProvider } from "@/provider/LocalStorage.provider";
-import BASE_URL from "@/share/consts";
+import BASE_URL from "@/shared/consts";
 
 export default class RegisterViewModel {
   model;
