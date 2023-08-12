@@ -4,14 +4,14 @@
     <h1 class="main__title">Тестовое наставника kids web</h1>
     <div class="main__container">
       <div class="main__images">
-        <figure class="main__image-container">
+        <!-- <figure class="main__image-container">
           <img
             class="main__image main__image--new"
             src="../../assets/images/new-img.jpg"
             alt="Мое текущее фото"
           />
           <figcaption class="main__caption">Мое текущее фото</figcaption>
-        </figure>
+        </figure> -->
         <figure class="main__image-container">
           <img
             class="main__image main__image--old"
