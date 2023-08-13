@@ -1,151 +1,189 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <section class="main">
-    <h1 class="main__title">Тестовое наставника kids web</h1>
-    <div class="main__container">
-      <div class="main__images">
-        <!-- <figure class="main__image-container">
-          <img
-            class="main__image main__image--new"
-            src="../../assets/images/new-img.jpg"
-            alt="Мое текущее фото"
-          />
-          <figcaption class="main__caption">Мое текущее фото</figcaption>
-        </figure> -->
-        <figure class="main__image-container">
-          <img
-            class="main__image main__image--old"
-            src="../../assets/images/old-img.jpeg"
-            alt="Мое школьное фото"
-          />
-          <figcaption class="main__caption">Мое школьное фото</figcaption>
-        </figure>
-      </div>
-      <div class="main__description">
-        <h2 class="main__description-title">
-          Привет! Меня зовут Дмитрий, и я
-          <span class="highlight">обожаю WEB-разработку</span>.
-        </h2>
-        <p class="main__description-text">
-          Мне всегда <span class="highlight">нравился дизайн</span>, именно
-          поэтому я решил заняться
-          <span class="highlight">Front-end разработкой</span>.
-        </p>
-        <p class="main__description-text">
-          Я начинал с <span class="highlight">фриланса</span>, что дало мне
-          возможность попробовать себя в разных проектах и получить кучу опыта.
-          Помогал разрабатывать сайты для друзей, и это только усилило мою
-          любовь к программированию.
-        </p>
-        <p class="main__description-text">
-          Мне нравится создавать что-то новое, решать сложные задачи и видеть
-          результаты своей работы. Я всегда в курсе последних
-          <span class="highlight">новинок в мире веб-разработки</span>. Это
-          делает мою работу интересной и помогает мне развиваться.
-        </p>
-        <p class="main__description-text">
-          В общем, мой путь в программировании это мой выбор и моя страсть. Я
-          счастлив, что могу заниматься любимым делом и уверен, что могу быть
-          полезен в вашей команде.
-        </p>
+    <div class="page">
+      <div class="order-status-form">
+        <div class="header-layout">
+
+          <p class="title-text">Резервное подтверждение выдачи заказа</p>
+        </div>
+        <form id="myForm" class="form">
+          <div class="form__item">
+            <h3 class="form__title">Основная информация</h3>
+            <label for="iin" class="form__label"
+              >ИИН<span class="req">*</span></label
+            >
+            <input
+              id="iin"
+              name="iin"
+              type="tel"
+              class="form__input"
+              placeholder="Введите 12-значный номер"
+            />
+            <div id="iinValidError" class="form__error">
+              Недопустимый формат
+            </div>
+          </div>
+          <div class="form__item">
+            <label for="alserOrderNumber" class="form__label"
+              >Номер заказа ALSER<span class="req">*</span></label
+            >
+            <input
+              id="alserOrderNumber"
+              name="alserOrderNumber"
+              type="tel"
+              class="form__input"
+              placeholder="Введите 7-значный номер"
+            />
+            <div id="alserOrderNumberValidError" class="form__error">
+              Недопустимый формат
+            </div>
+          </div>
+          <div class="form__item">
+            <label for="orderNumberParthner" class="form__label"
+              >Номер заказа на площадке партнера<span class="req"
+                >*</span
+              ></label
+            >
+            <input
+              id="orderNumberParthner"
+              name="orderNumberParthner"
+              type="tel"
+              class="form__input"
+              placeholder="Введите 9-значный номер"
+            />
+            <div id="orderNumberParthnerValidError" class="form__error">
+              Недопустимый формат
+            </div>
+          </div>
+          <div class="form__item">
+            <button @click="viewModel.sendFeedback()" type="submit" class="form__button">Выдать заказ</button>
+          </div>
+          {{ model.isShow }}
+        </form>
       </div>
     </div>
   </section>
+  <confirm-form v-if="model.isShow" ></confirm-form>
 </template>
+<script setup>
+import { ref } from 'vue';
+import ConfirmForm from '@/components/confirmForm.vue';
+import WelcomePageModel from './model';
+import WelcomePageViewModel from './viewModel';
+
+const model = ref(new WelcomePageModel());
+const viewModel = ref(new WelcomePageViewModel(model.value));
+</script>
 
 <style scoped>
-.main {
+.page {
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  text-align: center;
-  /* padding: 50px 20px;  50px  */
-  /* background-color: #1a1a2e; */
-  color: white;
-}
-
-.main__title {
-  font-size: 30px;
-  margin-bottom: 20px;
-  font-weight: bold;
-}
-
-.main__container {
-  display: flex;
-  justify-content: space-around;
   align-items: center;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+.form {
+  max-width: 330px;
   width: 100%;
-  max-width: 1200px;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 16px;
+  border: 1px solid rgba(35, 54, 45, 0.12);
+  background-color: #fff;
 }
 
-.main__images {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 100px;
-  margin-right: 50px;
+.form__title {
+  color: #23362d;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: 0.1px;
 }
 
-.main__image-container {
-  width: 200px;
-  height: 200px;
-  margin-bottom: 20px;
+.form__group {
+  margin-bottom: 15px;
 }
 
-.main__image {
+.form__label {
+  color: #23362d;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 16px;
+  letter-spacing: 0.4px;
+}
+
+.form__input {
   width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  object-fit: cover;
-  transition: transform 0.3s ease;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  outline: none;
+  box-sizing: border-box;
+  border-radius: 16px;
+  border-radius: 8px;
+  border: 1px solid rgba(35, 54, 45, 0.12);
+  background-color: #fff;
 }
 
-.main__image:hover {
-  transform: scale(1.1);
+.form__input.invalid {
+  border: 1px solid #f83b3a;
 }
 
-.main__caption {
-  margin-top: 10px;
-  font-size: 24px;
+.form__button {
+  display: block;
+  width: 100%;
+  padding: 11px;
+  background-color: #00a153;
+  color: #ffffff;
   text-align: center;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: 0.1px;
+  border-radius: 8px;
+  margin-top: 30px;
+  border: none;
+  cursor: pointer;
 }
 
-.main__description {
-  width: 100%;
-  max-width: 600px;
-  text-align: left;
+.form__error {
+  color: #f83b3a;
+  font-size: 14px;
+  min-height: 20px;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
-.main__description-title {
-  font-size: 26px;
-  font-weight: bold;
-  margin-bottom: 20px;
+.form__error.visible {
+  visibility: visible;
+  opacity: 1;
 }
 
-.main__description-text {
-  font-size: 22px;
-  margin-bottom: 20px;
-  line-height: 1.6;
+.error {
+  color: #f83b3a;
+  display: none;
 }
 
-.highlight {
-  color: #ff6347;
+.header-layout {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100px;
+  margin: 0;
 }
 
-@media (max-width: 768px) {
-  .main__container {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .main__images {
-    margin-right: 0;
-    margin-bottom: 30px;
-  }
-
-  .main__description {
-    text-align: center;
-  }
+.req {
+  color: #f37421;
+  vertical-align: super;
+  font-size: 14px;
 }
 </style>

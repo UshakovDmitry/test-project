@@ -18,7 +18,7 @@ body {
   padding: 0;
   display: flex;
   flex-direction: column;
-  background-color: rgba(23, 5, 46, 0.5);
+  background-color: rgba(197, 167, 240, 0.64);
 }
 h1,
 h2,
