@@ -4,6 +4,7 @@
     <div class="page">
       <div class="order-status-form">
         <div class="header-layout">
+          {{ model.alserOrderNumberError }}
           <img
             src="../../assets/images/alser.jpeg"
             alt="Логотип компании"
@@ -16,11 +17,8 @@
         <form id="myForm" class="form">
           <div class="form__item">
             <h3 class="form__title">Основная информация</h3>
-            <label for="iin" class="form__label"
-              >ИИН<span class="req">*</span></label
-            >
-            <!-- ... ваша предыдущая разметка ... -->
 
+            <label for="iin" class="form__label">ИИН<span class="req">*</span></label>
             <input
               v-model="model.iin"
               @input="validateFields('iin')"
@@ -28,16 +26,14 @@
               name="iin"
               type="tel"
               class="form__input"
-              :class="{ invalid: !model.iinValid }"
+              :class="{ invalid: model.iinError }"
               placeholder="Введите 12-значный номер"
             />
-            <div v-if="!model.iinValid" class="form__error">
-              Недопустимый формат
+            <div :class="{ 'visible': model.iinError }" class="form__error">
+              {{ model.iinError }}
             </div>
-            <label for="orderNumberParthner" class="form__label"
-              >Номер заказа ALSER.kz<span class="req"
-                >*</span
-              ></label>
+
+            <label for="alserOrderNumber" class="form__label">Номер заказа ALSER<span class="req">*</span></label>
             <input
               v-model="model.alserOrderNumber"
               @input="validateFields('alserOrderNumber')"
@@ -45,45 +41,46 @@
               name="alserOrderNumber"
               type="tel"
               class="form__input"
-              :class="{ invalid: !model.alserOrderNumberValid }"
+              :class="{ invalid: model.alserOrderNumberError }"
               placeholder="Введите 7-значный номер"
             />
-            <div v-if="!model.alserOrderNumberValid" class="form__error">
-              Недопустимый формат
+            <div :class="{ 'visible': model.alserOrderNumberError }" class="form__error">
+              {{ model.alserOrderNumberError }}
             </div>
 
-            <!-- Аналогично для других полей -->
-          </div>
-          <div class="form__item">
-            <label for="orderNumberParthner" class="form__label"
-              >Номер заказа на площадке партнера<span class="req"
-                >*</span
-              ></label
-            >
+            <label for="orderNumberParthner" class="form__label">Номер на площадке партнера<span class="req">*</span></label>
             <input
+              v-model="model.orderNumberParthner"
+              @input="validateFields('orderNumberParthner')"
               id="orderNumberParthner"
               name="orderNumberParthner"
               type="tel"
               class="form__input"
+              :class="{ invalid: model.orderNumberParthnerError }"
               placeholder="Введите 9-значный номер"
             />
-            <div id="orderNumberParthnerValidError" class="form__error">
-              Недопустимый формат
+            <div :class="{ 'visible': model.orderNumberParthnerError }" class="form__error">
+              {{ model.orderNumberParthnerError }}
             </div>
           </div>
           <div class="form__item">
-            <button @click.prevent="viewModel.sendFeedback" class="form__button">Выдать заказ</button>
+            <button @click.prevent="viewModel.sendFeedback" class="form__button">
+  Выдать заказ
+</button>
           </div>
         </form>
       </div>
     </div>
   </section>
-  <confirm-form v-if="model.isShow"></confirm-form>
+  <modal-window v-if="model.isShowModal">
+    <confirm-form></confirm-form>
+  </modal-window>
 </template>
 
 <script setup>
 import { ref } from "vue";
-import ConfirmForm from "@/components/confirmForm.vue";
+import ModalWindow from "@/components/modal/modal.vue";
+import ConfirmForm from "@/components/confirmCode/confirmCode.vue";
 import WelcomePageModel from "./model";
 import WelcomePageViewModel from "./viewModel";
 
@@ -167,6 +164,7 @@ const validateFields = (field) => {
   border-radius: 8px;
   border: 1px solid rgba(35, 54, 45, 0.12);
   background-color: #fff;
+  margin-bottom: 10px; /* Добавлен отступ снизу */
 }
 
 .form__input.invalid {
@@ -194,10 +192,10 @@ const validateFields = (field) => {
 .form__error {
   color: #f83b3a;
   font-size: 14px;
-  min-height: 20px;
-  visibility: hidden;
-  opacity: 0;
-  transition: opacity 0.3s ease;
+  min-height: 20px;   /* минимальная высота */
+  opacity: 0;         /* изначально скрыт */
+  transition: opacity 0.3s ease;   /* плавный переход для отображения и скрытия */
+  visibility: hidden; /* изначально скрыт */
 }
 
 .form__error.visible {

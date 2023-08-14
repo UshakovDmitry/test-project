@@ -1,0 +1,58 @@
+.backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10000000000;
+    animation: backdrops 0.2s ease-in-out 1;
+    background: rgba(0, 0, 0, 0.6);
+  }
+  
+  .modal-wrapper {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+  }
+  
+  @media (min-width: 480px) { /* Assuming $mobile variable was set to 480 */
+    .modal-wrapper {
+      padding: 0 24px;
+    }
+  }
+  
+  .modal-wrapper_center {
+    position: relative !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .modal-custom {
+    background: #fff;
+    border-radius: 16px;
+    animation: bounce 0.2s infinite 1;
+    box-shadow: 0 0 46px 5px rgba(0, 0, 0, 0.21);
+    margin: 0 auto;
+  }
+  
+  @keyframes bounce {
+    0% {
+      transform: scale(0);
+      box-shadow: none;
+    }
+    100% {
+      transform: scale(1);
+      box-shadow: 0 0 46px 5px rgba(0, 0, 0, 0.21);
+    }
+  }
+  
+  @keyframes backdrops {
+    0% {
+      background: rgba(0, 0, 0, 0);
+    }
+    100% {
+      background: rgba(0, 0, 0, 0.3);
+    }
+  }
+  
