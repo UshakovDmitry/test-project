@@ -4,8 +4,14 @@
     <div class="page">
       <div class="order-status-form">
         <div class="header-layout">
-          <img src="../../assets/images/alser.jpeg" alt="Логотип компании" class="img"  />
-          <p class="header-layout__text">Резервное подтверждение выдачи заказа</p>
+          <img
+            src="../../assets/images/alser.jpeg"
+            alt="Логотип компании"
+            class="img"
+          />
+          <p class="header-layout__text">
+            Резервное подтверждение выдачи заказа
+          </p>
         </div>
         <form id="myForm" class="form">
           <div class="form__item">
@@ -13,31 +19,40 @@
             <label for="iin" class="form__label"
               >ИИН<span class="req">*</span></label
             >
+            <!-- ... ваша предыдущая разметка ... -->
+
             <input
+              v-model="model.iin"
+              @input="validateFields('iin')"
               id="iin"
               name="iin"
               type="tel"
               class="form__input"
+              :class="{ invalid: !model.iinValid }"
               placeholder="Введите 12-значный номер"
             />
-            <div id="iinValidError" class="form__error">
+            <div v-if="!model.iinValid" class="form__error">
               Недопустимый формат
             </div>
-          </div>
-          <div class="form__item">
-            <label for="alserOrderNumber" class="form__label"
-              >Номер заказа ALSER<span class="req">*</span></label
-            >
+            <label for="orderNumberParthner" class="form__label"
+              >Номер заказа ALSER.kz<span class="req"
+                >*</span
+              ></label>
             <input
+              v-model="model.alserOrderNumber"
+              @input="validateFields('alserOrderNumber')"
               id="alserOrderNumber"
               name="alserOrderNumber"
               type="tel"
               class="form__input"
+              :class="{ invalid: !model.alserOrderNumberValid }"
               placeholder="Введите 7-значный номер"
             />
-            <div id="alserOrderNumberValidError" class="form__error">
+            <div v-if="!model.alserOrderNumberValid" class="form__error">
               Недопустимый формат
             </div>
+
+            <!-- Аналогично для других полей -->
           </div>
           <div class="form__item">
             <label for="orderNumberParthner" class="form__label"
@@ -57,22 +72,36 @@
             </div>
           </div>
           <div class="form__item">
-            <button @click="viewModel.sendFeedback()" type="submit" class="form__button">Выдать заказ</button>
+            <button @click.prevent="viewModel.sendFeedback" class="form__button">Выдать заказ</button>
           </div>
         </form>
       </div>
     </div>
   </section>
-  <confirm-form v-if="model.isShow" ></confirm-form>
+  <confirm-form v-if="model.isShow"></confirm-form>
 </template>
+
 <script setup>
-import { ref } from 'vue';
-import ConfirmForm from '@/components/confirmForm.vue';
-import WelcomePageModel from './model';
-import WelcomePageViewModel from './viewModel';
+import { ref } from "vue";
+import ConfirmForm from "@/components/confirmForm.vue";
+import WelcomePageModel from "./model";
+import WelcomePageViewModel from "./viewModel";
 
 const model = ref(new WelcomePageModel());
 const viewModel = ref(new WelcomePageViewModel(model.value));
+
+const validateFields = (field) => {
+  if (field === "iin")
+    model.value.iinValid = viewModel.value.validateIIN(model.value.iin);
+  if (field === "alserOrderNumber")
+    model.value.alserOrderNumberValid =
+      viewModel.value.validateAlserOrderNumber(model.value.alserOrderNumber);
+  if (field === "orderNumberParthner")
+    model.value.orderNumberParthnerValid =
+      viewModel.value.validateOrderNumberParthner(
+        model.value.orderNumberParthner
+      );
+};
 </script>
 
 <style scoped>

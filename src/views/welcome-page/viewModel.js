@@ -1,34 +1,35 @@
-// import BASE_URL from "@/shared/consts";
-// import { LocalStorageProvider } from "@/provider/LocalStorage.provider";
-
 export default class WelcomePageViewModel {
-  model;
-  constructor(model) {
-    this.model = model;
+    constructor(model) {
+      this.model = model;
+    }
+  
+    validateIIN(iin) {
+      const pattern = /^\d{12}$/;
+      return pattern.test(iin);
+    }
+  
+    validateAlserOrderNumber(number) {
+      const pattern = /^\d{7}$/;
+      return pattern.test(number);
+    }
+  
+    validateOrderNumberParthner(number) {
+      const pattern = /^\d{9}$/;
+      return pattern.test(number);
+    }
+  
+    sendFeedback() {
+      const iinValid = this.validateIIN(this.model.iin);
+      const alserOrderNumberValid = this.validateAlserOrderNumber(this.model.alserOrderNumber);
+      const orderNumberParthnerValid = this.validateOrderNumberParthner(this.model.orderNumberParthner);
+  
+      if (iinValid && alserOrderNumberValid && orderNumberParthnerValid) {
+        this.model.isShow = true;
+      } else {
+        this.model.iinValid = iinValid;
+        this.model.alserOrderNumberValid = alserOrderNumberValid;
+        this.model.orderNumberParthnerValid = orderNumberParthnerValid;
+      }
+    }
   }
-
-  async sendFeedback() {
-this.model.isShow = true;
-    //     try {
-//       const response = await fetch(`${BASE_URL}/feedback`, {
-//         method: "POST",
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//         body: LocalStorageProvider.JSONtoString({ text }),
-//       });
-//       const data = await response.json();
-//       if (!response.ok) {
-//         throw Error(data.message);
-//       }
-//       this.model.feedbackMessage = "";
-//       this.model.isShow = true;
-//       this.model.modalMessage = "Ваше сообщение отправлено!";
-//       setTimeout(() => {
-//         this.model.isShow = false;
-//       }, 2000);
-//     } catch (err) {
-//       this.model.statusMessage = err.message;
-//     }
-  }
-}
+  
