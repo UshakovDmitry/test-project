@@ -4,8 +4,8 @@
     <div class="page">
       <div class="order-status-form">
         <div class="header-layout">
-
-          <p class="title-text">Резервное подтверждение выдачи заказа</p>
+          <img src="../../assets/images/alser.jpeg" alt="Логотип компании" class="img"  />
+          <p class="header-layout__text">Резервное подтверждение выдачи заказа</p>
         </div>
         <form id="myForm" class="form">
           <div class="form__item">
@@ -59,7 +59,6 @@
           <div class="form__item">
             <button @click="viewModel.sendFeedback()" type="submit" class="form__button">Выдать заказ</button>
           </div>
-          {{ model.isShow }}
         </form>
       </div>
     </div>
@@ -77,6 +76,16 @@ const viewModel = ref(new WelcomePageViewModel(model.value));
 </script>
 
 <style scoped>
+.img {
+  width: 200px;
+  height: 80px;
+  border-radius: 50%;
+  margin-bottom: 20px;
+}
+
+.header-layout__text {
+  margin-top: 0;
+}
 .page {
   display: flex;
   justify-content: center;
@@ -177,7 +186,7 @@ const viewModel = ref(new WelcomePageViewModel(model.value));
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  height: 100px;
+  height: auto;
   margin: 0;
 }
 

@@ -1,7 +1,7 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <header class="header">
-    <div class="header__container">
+    <!-- <div class="header__container">
         <router-link to="/welcome-page" class="header__title">App</router-link>
     
         <router-link
@@ -31,7 +31,7 @@
           >
         </nav>
       </div>
-    </div>
+    </div> -->
   </header>
 </template>
 
@@ -64,10 +64,10 @@ onBeforeUnmount(() => {
 
 window.addEventListener('storage', checkAuth);
 
-const logout = () => {
-  LocalStorageProvider.removeValue('token');
-  isAuthenticated.value = false;
-};
+// const logout = () => {
+//   LocalStorageProvider.removeValue('token');
+//   isAuthenticated.value = false;
+// };
 
 </script>
 
@@ -78,12 +78,12 @@ const logout = () => {
   position: fixed;
   top: 0;
   width: 100%;
-  height: 70px;
+  height: 0px;
   display: flex;
   justify-content: center;
-  background-color: #f5f5f5;
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.06);
-  z-index: 1000;
+  background-color: rgb(255, 255, 255);
+  /* box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+  z-index: 1000; */
 }
 
 .header__container {
