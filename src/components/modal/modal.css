@@ -17,7 +17,7 @@
   
   @media (min-width: 480px) { /* Assuming $mobile variable was set to 480 */
     .modal-wrapper {
-      padding: 0 24px;
+      padding: 0;
     }
   }
   

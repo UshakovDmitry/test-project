@@ -18,7 +18,9 @@
           <div class="form__item">
             <h3 class="form__title">Основная информация</h3>
 
-            <label for="iin" class="form__label">ИИН<span class="req">*</span></label>
+            <label for="iin" class="form__label"
+              >ИИН<span class="req">*</span></label
+            >
             <input
               v-model="model.iin"
               @input="validateFields('iin')"
@@ -29,11 +31,13 @@
               :class="{ invalid: model.iinError }"
               placeholder="Введите 12-значный номер"
             />
-            <div :class="{ 'visible': model.iinError }" class="form__error">
+            <div :class="{ visible: model.iinError }" class="form__error">
               {{ model.iinError }}
             </div>
 
-            <label for="alserOrderNumber" class="form__label">Номер заказа ALSER<span class="req">*</span></label>
+            <label for="alserOrderNumber" class="form__label"
+              >Номер заказа ALSER<span class="req">*</span></label
+            >
             <input
               v-model="model.alserOrderNumber"
               @input="validateFields('alserOrderNumber')"
@@ -44,11 +48,16 @@
               :class="{ invalid: model.alserOrderNumberError }"
               placeholder="Введите 7-значный номер"
             />
-            <div :class="{ 'visible': model.alserOrderNumberError }" class="form__error">
+            <div
+              :class="{ visible: model.alserOrderNumberError }"
+              class="form__error"
+            >
               {{ model.alserOrderNumberError }}
             </div>
 
-            <label for="orderNumberParthner" class="form__label">Номер на площадке партнера<span class="req">*</span></label>
+            <label for="orderNumberParthner" class="form__label"
+              >Номер на площадке партнера<span class="req">*</span></label
+            >
             <input
               v-model="model.orderNumberParthner"
               @input="validateFields('orderNumberParthner')"
@@ -59,14 +68,20 @@
               :class="{ invalid: model.orderNumberParthnerError }"
               placeholder="Введите 9-значный номер"
             />
-            <div :class="{ 'visible': model.orderNumberParthnerError }" class="form__error">
+            <div
+              :class="{ visible: model.orderNumberParthnerError }"
+              class="form__error"
+            >
               {{ model.orderNumberParthnerError }}
             </div>
           </div>
           <div class="form__item">
-            <button @click.prevent="viewModel.sendFeedback" class="form__button">
-  Выдать заказ
-</button>
+            <button
+              @click.prevent="viewModel.sendFeedback"
+              class="form__button"
+            >
+              Выдать заказ
+            </button>
           </div>
         </form>
       </div>
@@ -75,10 +90,14 @@
   <modal-window v-if="model.isShowModal">
     <confirm-form></confirm-form>
   </modal-window>
+  <modal-window v-if="model.isErrorMessageModal">
+    <error-message></error-message>
+  </modal-window>
 </template>
 
 <script setup>
 import { ref } from "vue";
+import ErrorMessage from "@/components/errorMessage.vue";
 import ModalWindow from "@/components/modal/modal.vue";
 import ConfirmForm from "@/components/confirmCode/confirmCode.vue";
 import WelcomePageModel from "./model";
@@ -192,9 +211,9 @@ const validateFields = (field) => {
 .form__error {
   color: #f83b3a;
   font-size: 14px;
-  min-height: 20px;   /* минимальная высота */
-  opacity: 0;         /* изначально скрыт */
-  transition: opacity 0.3s ease;   /* плавный переход для отображения и скрытия */
+  min-height: 20px; /* минимальная высота */
+  opacity: 0; /* изначально скрыт */
+  transition: opacity 0.3s ease; /* плавный переход для отображения и скрытия */
   visibility: hidden; /* изначально скрыт */
 }
 

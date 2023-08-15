@@ -2,21 +2,70 @@ export default class WelcomePageViewModel {
   constructor(model) {
     this.model = model;
   }
+  async getKaspiOrder(orderNumberParthner) {
+    console.log (orderNumberParthner,)
+    try {
+      const response = await fetch(
+        `https://kaspi.kz/shop/api/v2/orders/?filter[orders][code]=${orderNumberParthner}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/vnd.api+json",
+            "X-Auth-Token": this.model.X_AUTH_TOKEN,
+          },
+        }
+      );
 
-  areAllFieldsValid() {
-    return this.model.iinValid && this.model.alserOrderNumberValid && this.model.orderNumberParthnerValid;
+      if (!response.ok) {
+        throw new Error(`Ошибка HTTP: ${response.status}`);
+      }
+
+      const responseData = await response.json();
+      const data = responseData?.data;
+
+      if (!data || data.length === 0) {
+        return "ERROR";
+      }
+
+      const orderStatus = data[0]?.attributes?.status;
+      const orderType = data[0]?.type;
+      const orderId = data[0]?.id;
+
+      if (orderStatus === "ACCEPTED_BY_MERCHANT") {
+        return {
+          status: orderStatus,
+          type: orderType,
+          orderId: orderId,
+        };
+      } else {
+        return orderStatus;
+      }
+    } catch (error) {
+      console.error("Ошибка при получении заказа", error);
+      return "ERROR";
+    }
   }
 
-  sendFeedback() {
+  areAllFieldsValid() {
+    return (
+      this.model.iinValid &&
+      this.model.alserOrderNumberValid &&
+      this.model.orderNumberParthnerValid
+    );
+  }
+
+  async sendFeedback() {
     if (this.areAllFieldsValid()) {
-      console.log(`ИИН: ${this.model.iin}`);
-      console.log(`Номер заказа ALSER: ${this.model.alserOrderNumber}`);
-      console.log(`Номер на площадке партнера: ${this.model.orderNumberParthner}`);
-      this.model.isShowModal = true;
+    //   const kaspiOrderResponse = await this.getKaspiOrder(this.model.orderNumberParthner);
+
+      // В зависимости от ответа, вы можете обновить вашу модель или выполнить другие действия
+      console.log("Отправка данных на сервер");
+this.model.isErrorMessageModal = true;
+      // Если нужно, здесь вы можете добавить дополнительную обработку ответа
+
     } else {
       console.error("Ошибка: не все поля введены корректно.");
     }
-    
   }
 
   validateIIN(iin) {
@@ -82,6 +131,4 @@ export default class WelcomePageViewModel {
     }
     return isValid;
   }
-
-
 }

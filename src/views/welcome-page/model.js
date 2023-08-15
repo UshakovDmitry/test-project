@@ -7,6 +7,7 @@ export default class WelcomePageModel {
         this.orderNumberParthner = "";
         this.orderNumberParthnerError = "";
         this.isShowModal = false;
-        // ... Остальные поля без изменений ...
+        this.isErrorMessageModal = false;
+        this.X_AUTH_TOKEN = "F6fHIvrvku1e5/Tsb5BEWaX3bZvcqGkEki8oRE7hZj0=";
     }
 }
