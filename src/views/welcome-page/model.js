@@ -8,6 +8,6 @@ export default class WelcomePageModel {
         this.orderNumberParthnerError = "";
         this.isShowModal = false;
         this.isErrorMessageModal = false;
-        this.X_AUTH_TOKEN = "F6fHIvrvku1e5/Tsb5BEWaX3bZvcqGkEki8oRE7hZj0=";
+        // this.X_AUTH_TOKEN = "F6fHIvrvku1e5/Tsb5BEWaX3bZvcqGkEki8oRE7hZj0=";
     }
 }

@@ -1,72 +1,75 @@
+import axios from 'axios';
+
 export default class WelcomePageViewModel {
-  constructor(model) {
-    this.model = model;
-  }
-  async getKaspiOrder(orderNumberParthner) {
-    console.log (orderNumberParthner,)
-    try {
-      const response = await fetch(
-        `https://kaspi.kz/shop/api/v2/orders/?filter[orders][code]=${orderNumberParthner}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/vnd.api+json",
-            "X-Auth-Token": this.model.X_AUTH_TOKEN,
-          },
+    constructor(model) {
+      this.model = model;
+    }
+  
+    validateOrderStatus(orderStatus) {
+      const OrderStatuses = {
+        // ... (ваш список статусов)
+        ERROR: 'Не удалось определить статус заказа',
+      };
+      return orderStatus in OrderStatuses ? OrderStatuses[orderStatus] : OrderStatuses.ERROR;
+    }
+  
+    async getKaspiOrder(orderNumberParthner) {
+        try {
+          const response = await axios.get(
+            `https://kaspi.kz/shop/api/v2/orders/?filter[orders][code]=${orderNumberParthner}`,
+            {
+              headers: {
+                'Content-Type': 'application/vnd.api+json',
+                'X-Auth-Token': this.model.X_AUTH_TOKEN,
+              },
+            }
+          );
+    
+          const data = response.data?.data;
+    
+          if (!data || data.length === 0) {
+            return { status: 'ERROR', errorText: 'Неправильный запрос или заказ не найден' };
+          }
+    
+          const orderStatus = data[0]?.attributes?.status;
+          const validatedStatus = this.validateOrderStatus(orderStatus);
+    
+          return { status: validatedStatus };
+        } catch (error) {
+          console.error('Ошибка при получении заказа', error);
+          return { status: 'ERROR', errorText: 'Ошибка при получении заказа' };
         }
-      );
-
-      if (!response.ok) {
-        throw new Error(`Ошибка HTTP: ${response.status}`);
       }
-
-      const responseData = await response.json();
-      const data = responseData?.data;
-
-      if (!data || data.length === 0) {
-        return "ERROR";
-      }
-
-      const orderStatus = data[0]?.attributes?.status;
-      const orderType = data[0]?.type;
-      const orderId = data[0]?.id;
-
-      if (orderStatus === "ACCEPTED_BY_MERCHANT") {
-        return {
-          status: orderStatus,
-          type: orderType,
-          orderId: orderId,
-        };
+    
+  
+    async sendFeedback() {
+      if (this.areAllFieldsValid()) {
+        const kaspiOrderResponse = await this.getKaspiOrder(this.model.orderNumberParthner);
+        console.log(kaspiOrderResponse, 'kaspiOrderResponse');
+  
+        if (kaspiOrderResponse.status === 'ACCEPTED_BY_MERCHANT') {
+          // Выполните дополнительные действия для статуса ACCEPTED_BY_MERCHANT
+          console.log('Статус: Принят магазином. Выполняю дополнительные действия.');
+          this.model.isShowModal = true;
+        } else if (kaspiOrderResponse.status === 'ERROR') {
+          console.log('Статус: Не удалось определить статус заказа');
+          this.model.errorMessage = true;
+          this.model.errorMessageText = kaspiOrderResponse.errorText;
+        }
       } else {
-        return orderStatus;
+        console.error('Ошибка: не все поля введены корректно.');
       }
-    } catch (error) {
-      console.error("Ошибка при получении заказа", error);
-      return "ERROR";
     }
-  }
-
-  areAllFieldsValid() {
-    return (
-      this.model.iinValid &&
-      this.model.alserOrderNumberValid &&
-      this.model.orderNumberParthnerValid
-    );
-  }
-
-  async sendFeedback() {
-    if (this.areAllFieldsValid()) {
-    //   const kaspiOrderResponse = await this.getKaspiOrder(this.model.orderNumberParthner);
-
-      // В зависимости от ответа, вы можете обновить вашу модель или выполнить другие действия
-      console.log("Отправка данных на сервер");
-this.model.isErrorMessageModal = true;
-      // Если нужно, здесь вы можете добавить дополнительную обработку ответа
-
-    } else {
-      console.error("Ошибка: не все поля введены корректно.");
+  
+    areAllFieldsValid() {
+      return (
+        this.model.iinValid &&
+        this.model.alserOrderNumberValid &&
+        this.model.orderNumberParthnerValid
+      );
     }
-  }
+  
+  
 
   validateIIN(iin) {
     const error = this.checkIINValidity(iin);
