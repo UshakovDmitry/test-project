@@ -1,75 +1,177 @@
-import axios from 'axios';
+import axios from "axios";
 
 export default class WelcomePageViewModel {
-    constructor(model) {
-      this.model = model;
-    }
-  
-    validateOrderStatus(orderStatus) {
-      const OrderStatuses = {
-        // ... (ваш список статусов)
-        ERROR: 'Не удалось определить статус заказа',
-      };
-      return orderStatus in OrderStatuses ? OrderStatuses[orderStatus] : OrderStatuses.ERROR;
-    }
-  
-    async getKaspiOrder(orderNumberParthner) {
-        try {
-          const response = await axios.get(
-            `https://kaspi.kz/shop/api/v2/orders/?filter[orders][code]=${orderNumberParthner}`,
-            {
-              headers: {
-                'Content-Type': 'application/vnd.api+json',
-                'X-Auth-Token': this.model.X_AUTH_TOKEN,
-              },
-            }
-          );
-    
-          const data = response.data?.data;
-    
-          if (!data || data.length === 0) {
-            return { status: 'ERROR', errorText: 'Неправильный запрос или заказ не найден' };
-          }
-    
-          const orderStatus = data[0]?.attributes?.status;
-          const validatedStatus = this.validateOrderStatus(orderStatus);
-    
-          return { status: validatedStatus };
-        } catch (error) {
-          console.error('Ошибка при получении заказа', error);
-          return { status: 'ERROR', errorText: 'Ошибка при получении заказа' };
+  constructor(model) {
+    this.model = model;
+  }
+
+  validateOrderStatus(orderStatus) {
+    const OrderStatuses = {
+      APPROVED_BY_BANK:
+        "Заказ одобрен банком, но не принят в ALSER.kz. Необходимо связаться с call центром для уточнения актуальности заказа",
+      ACCEPTED_BY_MERCHANT:
+        "Описание по этому статусу не отображаем, так как в данном случае идем дальше по процессу и инициируем выдачу через API Kaspi",
+      CANCELLED: "Заказ уже отменён и выдача невозможна",
+      CANCELLING: "Заказ ожидает отмены и выдача невозможна",
+      COMPLETED:
+        "Заказ уже завершён в системе Kaspi и не требует дальнейших действий",
+      KASPI_DELIVERY_RETURN_REQUESTED:
+        "Заказ ожидает возврата, выдача по этому заказу невозможна",
+      RETURN_ACCEPTED_BY_MERCHANT:
+        "Заказ ожидает решения по возврату, выдача по этому заказу невозможна",
+      RETURNED: "Заказ возвращён, выдача по этому заказу невозможна",
+      SUSPENDED: "Заказ приостановлен, выдача по этому заказу невозможна",
+      // Если статус не определен, то выводим ошибку
+      ERROR: "Не удалось определить статус заказа",
+    };
+    return orderStatus in OrderStatuses
+      ? OrderStatuses[orderStatus]
+      : OrderStatuses.ERROR;
+  }
+
+  async getKaspiOrder(orderNumberParthner) {
+    console.log("Получаю заказ");
+    try {
+      const response = await axios.get(
+        `https://my-netlify-proxy.alser2.workers.dev/orders/?filter[orders][code]=${encodeURIComponent(orderNumberParthner)}`,
+        {
+          headers: {
+            "Content-Type": "application/vnd.api+json",
+            "X-Auth-Token": "F6fHIvrvku1e5/Tsb5BEWaX3bZvcqGkEki8oRE7hZj0=",
+          },
         }
-      }
-    
-  
-    async sendFeedback() {
-      if (this.areAllFieldsValid()) {
-        const kaspiOrderResponse = await this.getKaspiOrder(this.model.orderNumberParthner);
-        console.log(kaspiOrderResponse, 'kaspiOrderResponse');
-  
-        if (kaspiOrderResponse.status === 'ACCEPTED_BY_MERCHANT') {
-          // Выполните дополнительные действия для статуса ACCEPTED_BY_MERCHANT
-          console.log('Статус: Принят магазином. Выполняю дополнительные действия.');
-          this.model.isShowModal = true;
-        } else if (kaspiOrderResponse.status === 'ERROR') {
-          console.log('Статус: Не удалось определить статус заказа');
-          this.model.errorMessage = true;
-          this.model.errorMessageText = kaspiOrderResponse.errorText;
-        }
-      } else {
-        console.error('Ошибка: не все поля введены корректно.');
-      }
-    }
-  
-    areAllFieldsValid() {
-      return (
-        this.model.iinValid &&
-        this.model.alserOrderNumberValid &&
-        this.model.orderNumberParthnerValid
       );
+      const data = response.data?.data;
+      if (data && data.length > 0) {
+        const orderStatus = data[0].attributes?.status;
+        return { status: orderStatus };
+      }
+    } catch (error) {
+      console.error("Ошибка при получении заказа", error);
     }
+  }
+
+  async checkCode(orderId, code) {
+    console.log('Проверяю код', orderId);
+    console.log('Проверяю код', code);
+
+    try {
+      const response = await axios.post(
+        'https://my-netlify-proxy.alser2.workers.dev/checkCode',
+        {
+          data: {
+            type: 'orders',
+            id: orderId,
+            attributes: {
+              status: 'COMPLETED',
+            },
+          },
+        },
+        {
+          headers: {
+            'Content-Type': 'application/vnd.api+json',
+            "X-Auth-Token": "F6fHIvrvku1e5/Tsb5BEWaX3bZvcqGkEki8oRE7hZj0=",
+            // 'X-Security-Code': Number(code),
+            'X-Send-Code': true,
+          },
+        }
+      );
   
+      if (response.status >= 200 && response.status < 300) {
+        console.log('Код подтвержден', response);
+        return true;
+      }
+      if (response.status >= 400 && response.status <= 500) {
+        console.log('Ошибка подтверждения кода', response.status);
+        return false;
+      }
+    } catch (error) {
+      console.log('Ошибка подтвержения', error);
+      return false;
+    }
+  }
   
+  async requestCodefromKaspi(orderId) {
+    console.log('Отправляю запрос на получение кода', orderId);
+    try {
+      const response = await axios.post(
+        'https://my-netlify-proxy.alser2.workers.dev/requestCode',
+        {
+          data: {
+            type: 'orders',
+            id: orderId,
+            attributes: {
+              status: 'COMPLETED',
+            },
+          },
+        },
+        {
+          headers: {
+            'Content-Type': 'application/vnd.api+json',
+            "X-Auth-Token": "F6fHIvrvku1e5/Tsb5BEWaX3bZvcqGkEki8oRE7hZj0=",
+            'X-Send-Code': true,
+          },
+        }
+      );
+  console.log('Отправляю запрос на получение кода', response);
+      if (response.status >= 200 && response.status < 300) {
+        return true;
+      }
+      if (response.status >= 400 && response.status <= 500) {
+        console.log('Ошибка при отправке кода', response.status);
+        return false;
+      }
+    } catch (error) {
+      console.log('Ошибка при отправке кода', error);
+      return false;
+    }
+  }
+  
+
+  async sendFeedback() {
+    if (this.areAllFieldsValid()) {
+      const kaspiOrderResponse = await this.getKaspiOrder(
+        this.model.orderNumberParthner
+      );
+      let orderStatusFromKaspi = kaspiOrderResponse.status;
+      let orderStatus = this.validateOrderStatus(orderStatusFromKaspi);
+      if (orderStatusFromKaspi === "ACCEPTED_BY_MERCHANT"){
+        const isCodeValid = await this.requestCodefromKaspi(this.model.orderNumberParthner);
+        console.log('isCodeValid', isCodeValid);
+        this.model.isShowModal = true;
+      } else  
+        this.model.isErrorMessageModal = true;
+        this.model.errorMessageText = orderStatus;
+      }
+     else {
+      console.error("Ошибка: не все поля введены корректно.");
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  areAllFieldsValid() {
+    return (
+      this.model.iinValid &&
+      this.model.alserOrderNumberValid &&
+      this.model.orderNumberParthnerValid
+    );
+  }
 
   validateIIN(iin) {
     const error = this.checkIINValidity(iin);
@@ -133,5 +235,11 @@ export default class WelcomePageViewModel {
       this.model.orderNumberParthnerError = "";
     }
     return isValid;
+  }
+
+  closeErrorMessageModal(bool) {
+    console.log("Закрываю модальное окно с ошибкой");
+    console.log(bool, "bool");
+    this.model.isErrorMessageModal = bool
   }
 }

@@ -43,7 +43,10 @@ const model = ref(new ConfirmCodeModel());
 const viewModel = ref(new ConfirmCodeViewModel(model.value));
 
 const submitForm = () => {
-  // const code = viewModel.inputs.map(input => input.value).join('');
+  model.value.code = viewModel.value.model.inputs.reduce((acc, input) => {
+    return acc + input.value;
+  }, "");
+  console.log(model.value.code, "model.value.code");
 };
 
 onMounted(() => {

@@ -91,7 +91,10 @@
     <confirm-form></confirm-form>
   </modal-window>
   <modal-window v-if="model.isErrorMessageModal">
-    <error-message></error-message>
+    <error-message 
+    :error-message="model.errorMessageText"
+    @close="viewModel.closeErrorMessageModal($event)"
+    ></error-message>
   </modal-window>
 </template>
 
