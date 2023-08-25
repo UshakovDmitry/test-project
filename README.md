@@ -4,3 +4,7 @@ Cloudflare API Token: # Cloudflare API Token
 Cloudflare Zone ID: # Cloudflare Zone ID
 Cloudflare DNS Record ID: # Cloudflare DNS Record ID
 ```
+
+## Usage
+
+```bash
