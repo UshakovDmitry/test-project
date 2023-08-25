@@ -92,7 +92,9 @@ export default class WelcomePageViewModel {
         return false;
       }
     } catch (error) {
-      console.log('Ошибка подтвержения', error);
+      this.model.isShowModal = false;
+      this.model.isErrorMessageModal = true;
+      this.model.errorMessageText = 'Ошибка подтверждения кода';
       return false;
     }
   }
