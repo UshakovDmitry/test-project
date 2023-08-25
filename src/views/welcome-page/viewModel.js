@@ -33,11 +33,12 @@ export default class WelcomePageViewModel {
     console.log("Получаю заказ");
     try {
       const response = await axios.get(
-        `https://my-netlify-proxy.alser2.workers.dev/orders/?filter[orders][code]=${encodeURIComponent(orderNumberParthner)}`,
+        `https://my-netlify-proxy.alser2.workers.dev/orders/?filter[orders][code]=${encodeURIComponent(
+          orderNumberParthner
+        )}`,
         {
           headers: {
             "Content-Type": "application/vnd.api+json",
-            "X-Auth-Token": "F6fHIvrvku1e5/Tsb5BEWaX3bZvcqGkEki8oRE7hZj0=",
           },
         }
       );
@@ -46,7 +47,12 @@ export default class WelcomePageViewModel {
         const orderStatus = data[0].attributes?.status;
         const orderId = data[0].id;
         this.model.orderId = orderId;
-        return { status: orderStatus, id: orderId};
+        return { status: orderStatus, id: orderId };
+      } else {
+        this.model.isErrorMessageModal = true;
+        this.model.errorMessageText =
+          "Заказ не найден. Проверьте правильность введенных данных";
+        return { status: "ERROR", id: null };
       }
     } catch (error) {
       console.error("Ошибка при получении заказа", error);
@@ -54,87 +60,87 @@ export default class WelcomePageViewModel {
   }
 
   async checkCode(orderId, code) {
-    console.log('Проверяю код', orderId);
-    console.log('Проверяю код', code);
+    console.log("Проверяю код", orderId);
+    console.log("Проверяю код", code);
 
     try {
       const response = await axios.post(
-        'https://my-netlify-proxy.alser2.workers.dev/checkCode',
+        "https://my-netlify-proxy.alser2.workers.dev/checkCode",
         {
           data: {
-            type: 'orders',
+            type: "orders",
             id: orderId,
             attributes: {
-              status: 'COMPLETED',
+              status: "COMPLETED",
             },
           },
         },
         {
           headers: {
-            'Content-Type': 'application/vnd.api+json',
-            "X-Auth-Token": "F6fHIvrvku1e5/Tsb5BEWaX3bZvcqGkEki8oRE7hZj0=",
-            'X-Security-Code': Number(code),
-            'X-Send-Code': true,
+            "Content-Type": "application/vnd.api+json",
+            // "X-Auth-Token": "F6fHIvrvku1e5/Tsb5BEWaX3bZvcqGkEki8oRE7hZj0=",
+            "X-Security-Code": Number(code),
+            "X-Send-Code": true,
           },
         }
       );
-  
+
       if (response.status >= 200 && response.status < 300) {
-        console.log('Код подтвержден', response);
+        console.log("Код подтвержден", response);
         this.model.isShowModal = false;
         return true;
       }
       if (response.status >= 400 && response.status <= 500) {
-        console.log('Ошибка подтверждения кода', response.status);
+        console.log("Ошибка подтверждения кода", response.status);
         this.model.isShowModal = false;
         this.model.isErrorMessageModal = true;
-        this.model.errorMessageText = 'Ошибка подтверждения кода';
+        this.model.errorMessageText = "Ошибка подтверждения кода";
         return false;
       }
     } catch (error) {
       this.model.isShowModal = false;
       this.model.isErrorMessageModal = true;
-      this.model.errorMessageText = 'Ошибка подтверждения кода';
+      this.model.errorMessageText = "Ошибка подтверждения кода";
       return false;
     }
   }
-  
+
   async requestCodefromKaspi(orderId) {
-    console.log('Отправляю запрос на получение кода', orderId);
+    console.log("Отправляю запрос на получение кода", orderId);
     try {
       const response = await axios.post(
-        'https://my-netlify-proxy.alser2.workers.dev/requestCode',
+        "https://my-netlify-proxy.alser2.workers.dev/requestCode",
         {
           data: {
-            type: 'orders',
+            type: "orders",
             id: orderId,
             attributes: {
-              status: 'COMPLETED',
+              status: "COMPLETED",
             },
           },
         },
         {
           headers: {
-            'Content-Type': 'application/vnd.api+json',
-            "X-Auth-Token": "F6fHIvrvku1e5/Tsb5BEWaX3bZvcqGkEki8oRE7hZj0=",
-            'X-Send-Code': true,
+            "Content-Type": "application/vnd.api+json",
+            // "X-Auth-Token": "F6fHIvrvku1e5/Tsb5BEWaX3bZvcqGkEki8oRE7hZj0=",
+            "X-Send-Code": true,
           },
         }
       );
-  console.log('Отправляю запрос на получение кода', response);
+
+      console.log("Отправляю запрос на получение кода", response);
       if (response.status >= 200 && response.status < 300) {
         return true;
       }
       if (response.status >= 400 && response.status <= 500) {
-        console.log('Ошибка при отправке кода', response.status);
+        console.log("Ошибка при отправке кода", response.status);
         return false;
       }
     } catch (error) {
-      console.log('Ошибка при отправке кода', error);
+      console.log("Ошибка при отправке кода", error);
       return false;
     }
   }
-  
 
   async sendFeedback() {
     if (this.areAllFieldsValid()) {
@@ -144,35 +150,16 @@ export default class WelcomePageViewModel {
       let orderStatusFromKaspi = kaspiOrderResponse.status;
       let orderId = kaspiOrderResponse.id;
       let orderStatus = this.validateOrderStatus(orderStatusFromKaspi);
-      if (orderStatusFromKaspi === "ACCEPTED_BY_MERCHANT"){
+      if (orderStatusFromKaspi === "ACCEPTED_BY_MERCHANT") {
         const isCodeValid = await this.requestCodefromKaspi(orderId);
-        console.log('isCodeValid', isCodeValid);
+        console.log("isCodeValid", isCodeValid);
         this.model.isShowModal = true;
-      } else  
-        this.model.isErrorMessageModal = true;
-        this.model.errorMessageText = orderStatus;
-      }
-     else {
+      } else this.model.isErrorMessageModal = true;
+      this.model.errorMessageText = orderStatus;
+    } else {
       console.error("Ошибка: не все поля введены корректно.");
     }
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   areAllFieldsValid() {
     return (
@@ -249,6 +236,6 @@ export default class WelcomePageViewModel {
   closeErrorMessageModal(bool) {
     console.log("Закрываю модальное окно с ошибкой");
     console.log(bool, "bool");
-    this.model.isErrorMessageModal = bool
+    this.model.isErrorMessageModal = bool;
   }
 }
