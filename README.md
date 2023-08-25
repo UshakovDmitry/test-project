@@ -10,3 +10,4 @@ Cloudflare DNS Record ID: # Cloudflare DNS Record ID
 ```bash
 
 # Install dependencies
+$ npm install
