@@ -8,3 +8,5 @@ Cloudflare DNS Record ID: # Cloudflare DNS Record ID
 ## Usage
 
 ```bash
+
+# Install dependencies
