@@ -13,3 +13,5 @@ Cloudflare DNS Record ID: # Cloudflare DNS Record ID
 $ npm install   
 
 # Run the app
+
+$ npm run start
