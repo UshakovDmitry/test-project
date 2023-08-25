@@ -6,6 +6,7 @@ export default class WelcomePageModel {
         this.alserOrderNumberError = "";
         this.orderNumberParthner = "";
         this.orderNumberParthnerError = "";
+        this.orderId = "";
         this.code = "";
         this.isShowModal = false;
         this.isErrorMessageModal = false;

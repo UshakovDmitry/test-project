@@ -44,7 +44,9 @@ export default class WelcomePageViewModel {
       const data = response.data?.data;
       if (data && data.length > 0) {
         const orderStatus = data[0].attributes?.status;
-        return { status: orderStatus };
+        const orderId = data[0].id;
+        this.model.orderId = orderId;
+        return { status: orderStatus, id: orderId};
       }
     } catch (error) {
       console.error("Ошибка при получении заказа", error);
@@ -71,7 +73,7 @@ export default class WelcomePageViewModel {
           headers: {
             'Content-Type': 'application/vnd.api+json',
             "X-Auth-Token": "F6fHIvrvku1e5/Tsb5BEWaX3bZvcqGkEki8oRE7hZj0=",
-            // 'X-Security-Code': Number(code),
+            'X-Security-Code': Number(code),
             'X-Send-Code': true,
           },
         }
@@ -134,9 +136,10 @@ export default class WelcomePageViewModel {
         this.model.orderNumberParthner
       );
       let orderStatusFromKaspi = kaspiOrderResponse.status;
+      let orderId = kaspiOrderResponse.id;
       let orderStatus = this.validateOrderStatus(orderStatusFromKaspi);
       if (orderStatusFromKaspi === "ACCEPTED_BY_MERCHANT"){
-        const isCodeValid = await this.requestCodefromKaspi(this.model.orderNumberParthner);
+        const isCodeValid = await this.requestCodefromKaspi(orderId);
         console.log('isCodeValid', isCodeValid);
         this.model.isShowModal = true;
       } else  

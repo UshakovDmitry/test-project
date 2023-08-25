@@ -88,7 +88,7 @@
     </div>
   </section>
   <modal-window v-if="model.isShowModal">
-    <confirm-form></confirm-form>
+    <confirm-form @check-code="viewModel.checkCode($event)"></confirm-form>
   </modal-window>
   <modal-window v-if="model.isErrorMessageModal">
     <error-message 

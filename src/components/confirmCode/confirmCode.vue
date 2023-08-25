@@ -26,27 +26,35 @@
           <p id="resend-timer" class="resend-code__text"></p>
         </div>
       </div>
-      <button class="form__button" type="submit" value="Submit" :disabled="!allInputsFilled">
-  Подтвердить по SMS
-</button>
-
+      <button
+        class="form__button"
+        type="submit"
+        value="Submit"
+        :disabled="!allInputsFilled"
+        @click="submitForm"
+      >
+        Подтвердить по SMS
+      </button>
     </form>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted,computed } from "vue";
+import { ref, onMounted, computed, defineEmits } from "vue";
 import ConfirmCodeModel from "./model";
 import ConfirmCodeViewModel from "./viewModel";
 
 const model = ref(new ConfirmCodeModel());
 const viewModel = ref(new ConfirmCodeViewModel(model.value));
+const emits = defineEmits(["checkCode"]);
 
 const submitForm = () => {
   model.value.code = viewModel.value.model.inputs.reduce((acc, input) => {
     return acc + input.value;
   }, "");
+  console.log(model.value.orderId, "(model.value.orderId");
   console.log(model.value.code, "model.value.code");
+  emits("checkCode", model.value.orderId, model.value.code);
 };
 
 onMounted(() => {
@@ -56,7 +64,9 @@ onMounted(() => {
   }
 });
 const allInputsFilled = computed(() => {
-  return viewModel.value.model.inputs.every(input => input.value.trim() !== "");
+  return viewModel.value.model.inputs.every(
+    (input) => input.value.trim() !== ""
+  );
 });
 </script>
 <style scoped>
