@@ -81,10 +81,13 @@ export default class WelcomePageViewModel {
   
       if (response.status >= 200 && response.status < 300) {
         console.log('Код подтвержден', response);
+        this.model.isShowModal = false;
         return true;
       }
       if (response.status >= 400 && response.status <= 500) {
         console.log('Ошибка подтверждения кода', response.status);
+        this.model.isErrorMessageModal = true;
+        this.model.errorMessageText = 'Ошибка подтверждения кода';
         return false;
       }
     } catch (error) {
