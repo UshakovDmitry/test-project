@@ -86,6 +86,7 @@ export default class WelcomePageViewModel {
       }
       if (response.status >= 400 && response.status <= 500) {
         console.log('Ошибка подтверждения кода', response.status);
+        this.model.isShowModal = false;
         this.model.isErrorMessageModal = true;
         this.model.errorMessageText = 'Ошибка подтверждения кода';
         return false;
