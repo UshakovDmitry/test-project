@@ -9,6 +9,7 @@
           v-for="(input, index) in viewModel.model.inputs"
           :key="index"
           v-model="input.value"
+          type="tel"
           class="code__input"
           maxlength="1"
           required
