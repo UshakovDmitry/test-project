@@ -88,7 +88,11 @@
     </div>
   </section>
   <modal-window v-if="model.isShowModal">
-    <confirm-form @check-code="viewModel.checkCode($event)"></confirm-form>
+    <confirm-form 
+    :order-id="model.orderId"
+    @check-code="viewModel.checkCode($event)"
+    @requestCodefromKaspi="viewModel.requestCodefromKaspi($event)"
+    ></confirm-form>
   </modal-window>
   <modal-window v-if="model.isErrorMessageModal">
     <error-message 
@@ -103,11 +107,11 @@ import { ref } from "vue";
 import ErrorMessage from "@/components/errorMessage.vue";
 import ModalWindow from "@/components/modal/modal.vue";
 import ConfirmForm from "@/components/confirmCode/confirmCode.vue";
-import WelcomePageModel from "./model";
-import WelcomePageViewModel from "./viewModel";
+import MainPageModel from "./model";
+import MainPageViewModel from "./viewModel";
 
-const model = ref(new WelcomePageModel());
-const viewModel = ref(new WelcomePageViewModel(model.value));
+const model = ref(new MainPageModel());
+const viewModel = ref(new MainPageViewModel(model.value));
 
 const validateFields = (field) => {
   if (field === "iin")

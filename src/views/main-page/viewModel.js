@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export default class WelcomePageViewModel {
+export default class MainPageViewModel {
   constructor(model) {
     this.model = model;
   }
@@ -47,6 +47,7 @@ export default class WelcomePageViewModel {
         const orderStatus = data[0].attributes?.status;
         const orderId = data[0].id;
         this.model.orderId = orderId;
+        console.log(this.model.orderId,"this.model.orderId_1");
         return { status: orderStatus, id: orderId };
       } else {
         this.model.isErrorMessageModal = true;
@@ -59,9 +60,9 @@ export default class WelcomePageViewModel {
     }
   }
 
-  async checkCode(orderId, code) {
-    console.log("Проверяю код", orderId);
-    console.log("Проверяю код", code);
+  async checkCode(data) {
+    console.log("Проверяю ID", data.orderId);
+    console.log("Проверяю код", data.code);
 
     try {
       const response = await axios.post(
@@ -69,7 +70,7 @@ export default class WelcomePageViewModel {
         {
           data: {
             type: "orders",
-            id: orderId,
+            id: data.orderId,
             attributes: {
               status: "COMPLETED",
             },
@@ -78,8 +79,7 @@ export default class WelcomePageViewModel {
         {
           headers: {
             "Content-Type": "application/vnd.api+json",
-            // "X-Auth-Token": "F6fHIvrvku1e5/Tsb5BEWaX3bZvcqGkEki8oRE7hZj0=",
-            "X-Security-Code": Number(code),
+            "X-Security-Code": Number(data.code),
             "X-Send-Code": true,
           },
         }
@@ -107,6 +107,8 @@ export default class WelcomePageViewModel {
 
   async requestCodefromKaspi(orderId) {
     console.log("Отправляю запрос на получение кода", orderId);
+    console.log(this.model.orderId,"this.model.orderId_2");
+
     try {
       const response = await axios.post(
         "https://my-netlify-proxy.alser2.workers.dev/requestCode",
@@ -122,13 +124,11 @@ export default class WelcomePageViewModel {
         {
           headers: {
             "Content-Type": "application/vnd.api+json",
-            // "X-Auth-Token": "F6fHIvrvku1e5/Tsb5BEWaX3bZvcqGkEki8oRE7hZj0=",
             "X-Send-Code": true,
           },
         }
       );
 
-      console.log("Отправляю запрос на получение кода", response);
       if (response.status >= 200 && response.status < 300) {
         return true;
       }

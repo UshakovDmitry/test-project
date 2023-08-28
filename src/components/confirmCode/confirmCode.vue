@@ -20,9 +20,21 @@
       <div class="resend-code">
         <p class="resend-code__text">Не получили код?</p>
         <div id="resend-wrapper">
-          <p id="resend-link" href="" class="resend-code__link">
+          <p
+            id="resend-link"
+            v-if="!isLoading"
+            @click="resendCode"
+            class="resend-code__link"
+          >
             Отправить заново
           </p>
+
+          <!-- Загрузчик и отображение оставшегося времени -->
+          <div v-if="isLoading">
+            <div class="loader"></div>
+            <p class="resend-code__text">Отправить повторно можно через {{ remainingTime }} сек.</p>
+          </div>
+
           <p id="resend-timer" class="resend-code__text"></p>
         </div>
       </div>
@@ -40,21 +52,21 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed, defineEmits } from "vue";
+import { ref, onMounted, computed, defineEmits, defineProps } from "vue";
 import ConfirmCodeModel from "./model";
 import ConfirmCodeViewModel from "./viewModel";
-
+const props = defineProps({
+  orderId: String,
+});
 const model = ref(new ConfirmCodeModel());
 const viewModel = ref(new ConfirmCodeViewModel(model.value));
-const emits = defineEmits(["checkCode"]);
+const emits = defineEmits(["checkCode", "requestCodefromKaspi"]);
 
 const submitForm = () => {
   model.value.code = viewModel.value.model.inputs.reduce((acc, input) => {
     return acc + input.value;
   }, "");
-  console.log(model.value.orderId, "(model.value.orderId");
-  console.log(model.value.code, "model.value.code");
-  emits("checkCode", model.value.orderId, model.value.code);
+  emits("checkCode", { orderId: props.orderId, code: model.value.code });
 };
 
 onMounted(() => {
@@ -68,6 +80,27 @@ const allInputsFilled = computed(() => {
     (input) => input.value.trim() !== ""
   );
 });
+// 1. Создайте две новые переменные состояния:
+const isLoading = ref(false);
+const remainingTime = ref(0);
+
+const resendCode = () => {
+  if (isLoading.value) return; // Если загрузка активна, ничего не делаем
+
+  emits("requestCodefromKaspi", props.orderId);
+
+  isLoading.value = true;
+  remainingTime.value = 70; // Устанавливаем начальное значение времени в 70 секунд
+
+  const interval = setInterval(() => {
+    remainingTime.value -= 1; // Уменьшаем время на 1 секунду
+
+    if (remainingTime.value === 0) {
+      clearInterval(interval); // Останавливаем интервал
+      isLoading.value = false; // Выключаем загрузку
+    }
+  }, 1000);
+};
 </script>
 <style scoped>
 .close-button {

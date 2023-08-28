@@ -1,4 +1,4 @@
-export default class WelcomePageModel {
+export default class MainPageModel {
     constructor() {
         this.iin = "";
         this.iinError = "";

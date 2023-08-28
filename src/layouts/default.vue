@@ -1,17 +1,13 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <div class="layout">
-    <!-- <Header></Header> -->
     <main class="layout__content">
       <router-view></router-view>
     </main>
-    <!-- <Footer></Footer> -->
   </div>
 </template>
 
 <script setup>
-// import Header from "@/components/header.vue";
-// import Footer from "@/components/footer.vue";
 </script>
 
 <style scoped>
