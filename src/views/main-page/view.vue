@@ -191,8 +191,8 @@ const validateFields = (field) => {
   border: 1px solid rgba(35, 54, 45, 0.12);
   background-color: #fff;
   margin-bottom: 10px; /* Добавлен отступ снизу */
+  font-size: 16px; /* 16 минимальный чтобы не было увеличения в браузерах на мобильном устроисве */
 }
-
 .form__input.invalid {
   border: 1px solid #f83b3a;
 }
